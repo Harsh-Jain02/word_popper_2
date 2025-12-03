@@ -49,6 +49,22 @@ body.theme-neon {
   --word-ink: #0a0f1f;
 }
 
+body.theme-citrus {
+  --page-bg: radial-gradient(120% 120% at 20% 20%, #fff7e6 0%, #ffe9c7 50%, #ffe0b2 100%);
+  --frame-bg: #fff5dd;
+  --panel: #fff1d6;
+  --panel-alpha: rgba(255, 241, 214, 0.6);
+  --ink: #1f2937;
+  --muted: #4b5563;
+  --accent: #f97316;
+  --accent-2: #22d3ee;
+  --border: rgba(249, 115, 22, 0.25);
+  --shadow: 0 20px 60px rgba(249, 115, 22, 0.15);
+  --playfield-bg: radial-gradient(80% 80% at 20% 20%, rgba(249, 115, 22, 0.16), transparent 60%), radial-gradient(80% 80% at 80% 20%, rgba(255, 201, 105, 0.14), transparent 70%), #fff7e6;
+  --word-bg: #ffffff;
+  --word-ink: #1f2937;
+}
+
 body.theme-crt {
   --page-bg: radial-gradient(120% 120% at 50% 20%, #03100a 0%, #041b11 50%, #03100a 100%);
   --frame-bg: #041b11;
@@ -63,6 +79,22 @@ body.theme-crt {
   --playfield-bg: radial-gradient(85% 85% at 20% 20%, rgba(52, 211, 153, 0.18), transparent 60%), radial-gradient(75% 75% at 80% 20%, rgba(22, 163, 74, 0.16), transparent 70%), #03100a;
   --word-bg: rgba(255, 255, 255, 0.85);
   --word-ink: #041b11;
+}
+
+body.theme-mint {
+  --page-bg: radial-gradient(120% 120% at 25% 20%, #e8fff8 0%, #d4f7ef 50%, #c7f0e8 100%);
+  --frame-bg: #f1fffb;
+  --panel: #f8fffd;
+  --panel-alpha: rgba(248, 255, 253, 0.65);
+  --ink: #0b172a;
+  --muted: #334155;
+  --accent: #10b981;
+  --accent-2: #38bdf8;
+  --border: rgba(16, 185, 129, 0.22);
+  --shadow: 0 20px 60px rgba(16, 185, 129, 0.18);
+  --playfield-bg: radial-gradient(80% 80% at 20% 20%, rgba(16, 185, 129, 0.14), transparent 60%), radial-gradient(80% 80% at 75% 20%, rgba(56, 189, 248, 0.14), transparent 70%), #e8fff8;
+  --word-bg: #ffffff;
+  --word-ink: #0b172a;
 }
 
 * {

@@ -24,7 +24,7 @@ const levelDetail = document.getElementById('level-detail');
 const heroBox = document.querySelector('.hero');
 const statsBox = document.querySelector('.stats');
 const controlsBox = document.querySelector('.game-controls');
-const THEMES = ['dark', 'light', 'neon', 'crt'];
+const THEMES = ['dark', 'light', 'neon', 'citrus', 'crt', 'mint'];
 const LEVEL_GUTTER = 150;
 const LEVEL_DESCRIPTIONS = {
   1: 'Static words',
