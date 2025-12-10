@@ -1,49 +1,131 @@
-const playfield = document.getElementById('playfield');
-const frame = document.getElementById('frame');
-const startBtn = document.getElementById('start-btn');
-const stopBtn = document.getElementById('stop-btn');
-const restartBtn = document.getElementById('restart-btn');
-const scoreEl = document.getElementById('score');
-const poppedEl = document.getElementById('popped-count');
-const streakEl = document.getElementById('streak');
-const timerEl = document.getElementById('timer');
-const activeCountEl = document.getElementById('active-count');
-const form = document.getElementById('entry-form');
-const input = document.getElementById('word-input');
-const overlay = document.getElementById('overlay');
-const overlayTitle = document.getElementById('overlay-title');
-const overlayDetail = document.getElementById('overlay-detail');
-const introOverlay = document.getElementById('intro-overlay');
-const introClose = document.getElementById('intro-close');
-const mobileOverlay = document.getElementById('mobile-overlay');
-const mobileContinue = document.getElementById('mobile-continue');
-const pinToggles = document.querySelectorAll('.pin-toggle input');
-const themeButtons = document.querySelectorAll('[data-theme]');
-const levelButtons = document.querySelectorAll('[data-level]');
-const levelDetail = document.getElementById('level-detail');
-const heroBox = document.querySelector('.hero');
-const statsBox = document.querySelector('.stats');
-const controlsBox = document.querySelector('.game-controls');
-const THEMES = ['dark', 'light', 'neon', 'citrus', 'crt', 'mint'];
+const playfield = document.getElementById("playfield");
+const frame = document.getElementById("frame");
+const startBtn = document.getElementById("start-btn");
+const stopBtn = document.getElementById("stop-btn");
+const restartBtn = document.getElementById("restart-btn");
+const scoreEl = document.getElementById("score");
+const poppedEl = document.getElementById("popped-count");
+const streakEl = document.getElementById("streak");
+const timerEl = document.getElementById("timer");
+const activeCountEl = document.getElementById("active-count");
+const form = document.getElementById("entry-form");
+const input = document.getElementById("word-input");
+const overlay = document.getElementById("overlay");
+const overlayTitle = document.getElementById("overlay-title");
+const overlayDetail = document.getElementById("overlay-detail");
+const introOverlay = document.getElementById("intro-overlay");
+const introClose = document.getElementById("intro-close");
+const mobileOverlay = document.getElementById("mobile-overlay");
+const mobileContinue = document.getElementById("mobile-continue");
+const pinToggles = document.querySelectorAll(".pin-toggle input");
+const themeButtons = document.querySelectorAll("[data-theme]");
+const levelButtons = document.querySelectorAll("[data-level]");
+const levelDetail = document.getElementById("level-detail");
+const heroBox = document.querySelector(".hero");
+const statsBox = document.querySelector(".stats");
+const controlsBox = document.querySelector(".game-controls");
+const THEMES = ["dark", "light", "neon", "citrus", "crt", "mint"];
 const LEVEL_GUTTER = 150;
 const LEVEL_DESCRIPTIONS = {
-  1: 'Static words',
-  2: 'Words move',
-  3: 'UI floats',
-  4: 'Bounce rotation',
-  5: 'Theme chaos',
+  1: "Static words",
+  2: "Words move",
+  3: "UI floats",
+  4: "Bounce rotation",
+  5: "Theme chaos",
+  6: "Hyper theme swap",
 };
 
 const WORDS = [
-  'orbit', 'pulse', 'flash', 'matrix', 'echo', 'slide', 'glow', 'spark', 'trace', 'drift',
-  'storm', 'wave', 'pixel', 'shift', 'flare', 'bounce', 'swift', 'nova', 'comet', 'aura',
-  'nexus', 'quark', 'vivid', 'sonic', 'lumen', 'prism', 'glyph', 'rally', 'sprint', 'prime',
-  'chase', 'fleet', 'clear', 'bold', 'rapid', 'punch', 'blaze', 'ripple', 'bright', 'shine',
-  'racer', 'quick', 'laser', 'hatch', 'tempo', 'rush', 'dodge', 'sparkle', 'tumble', 'sketch',
-  'vector', 'cinder', 'ember', 'flick', 'rider', 'streak', 'swirl', 'hustle', 'snap', 'scale',
-  'craft', 'thrive', 'climb', 'float', 'pilot', 'atlas', 'rover', 'drone', 'pioneer', 'zenith',
-  'flashy', 'ready', 'punchy', 'burst', 'dart', 'fling', 'hover', 'jolt', 'leap', 'loom',
-  'loop', 'nudge', 'quiver', 'scout', 'swoop', 'twist', 'vault', 'vortex', 'whirl', 'zip'
+  "orbit",
+  "pulse",
+  "flash",
+  "matrix",
+  "echo",
+  "slide",
+  "glow",
+  "spark",
+  "trace",
+  "drift",
+  "storm",
+  "wave",
+  "pixel",
+  "shift",
+  "flare",
+  "bounce",
+  "swift",
+  "nova",
+  "comet",
+  "aura",
+  "nexus",
+  "quark",
+  "vivid",
+  "sonic",
+  "lumen",
+  "prism",
+  "glyph",
+  "rally",
+  "sprint",
+  "prime",
+  "chase",
+  "fleet",
+  "clear",
+  "bold",
+  "rapid",
+  "punch",
+  "blaze",
+  "ripple",
+  "bright",
+  "shine",
+  "racer",
+  "quick",
+  "laser",
+  "hatch",
+  "tempo",
+  "rush",
+  "dodge",
+  "sparkle",
+  "tumble",
+  "sketch",
+  "vector",
+  "cinder",
+  "ember",
+  "flick",
+  "rider",
+  "streak",
+  "swirl",
+  "hustle",
+  "snap",
+  "scale",
+  "craft",
+  "thrive",
+  "climb",
+  "float",
+  "pilot",
+  "atlas",
+  "rover",
+  "drone",
+  "pioneer",
+  "zenith",
+  "flashy",
+  "ready",
+  "punchy",
+  "burst",
+  "dart",
+  "fling",
+  "hover",
+  "jolt",
+  "leap",
+  "loom",
+  "loop",
+  "nudge",
+  "quiver",
+  "scout",
+  "swoop",
+  "twist",
+  "vault",
+  "vortex",
+  "whirl",
+  "zip",
 ];
 
 const state = {
@@ -59,7 +141,7 @@ const state = {
   nextId: 0,
   lastTick: 0,
   floaters: [],
-  theme: 'dark',
+  theme: "dark",
   themeCycleTimer: null,
   level: 1,
   rotationEnabled: false,
@@ -80,14 +162,14 @@ function randomVelocity() {
 }
 
 function setLevel(level) {
-  const nextLevel = Math.min(5, Math.max(1, Number(level) || 1));
+  const nextLevel = Math.min(6, Math.max(1, Number(level) || 1));
   state.level = nextLevel;
   state.rotationEnabled = nextLevel >= 4;
-  levelButtons.forEach(btn => {
-    btn.classList.toggle('active', Number(btn.dataset.level) === nextLevel);
+  levelButtons.forEach((btn) => {
+    btn.classList.toggle("active", Number(btn.dataset.level) === nextLevel);
   });
   if (levelDetail) {
-    const desc = LEVEL_DESCRIPTIONS[nextLevel] || '';
+    const desc = LEVEL_DESCRIPTIONS[nextLevel] || "";
     levelDetail.textContent = `Level ${nextLevel}: ${desc}`;
   }
   if (state.running) {
@@ -105,22 +187,23 @@ function stopThemeCycle() {
 function updateThemeCycle() {
   stopThemeCycle();
   if (state.running && state.level >= 5) {
+    const interval = state.level >= 6 ? 75 : 1000;
     state.themeCycleTimer = setInterval(() => {
       const currentIndex = THEMES.indexOf(state.theme);
       const nextIndex = (currentIndex + 1) % THEMES.length;
       applyTheme(THEMES[nextIndex]);
-    }, 1000);
+    }, interval);
   }
 }
 
 function spawnWord() {
   if (!state.running) return;
-  const activeTexts = new Set(state.words.map(w => w.text.toLowerCase()));
-  const available = WORDS.filter(w => !activeTexts.has(w.toLowerCase()));
+  const activeTexts = new Set(state.words.map((w) => w.text.toLowerCase()));
+  const available = WORDS.filter((w) => !activeTexts.has(w.toLowerCase()));
   if (!available.length) return;
   const word = available[Math.floor(Math.random() * available.length)];
-  const el = document.createElement('span');
-  el.className = 'word spawn';
+  const el = document.createElement("span");
+  el.className = "word spawn";
   el.textContent = word;
   const id = state.nextId++;
   el.dataset.id = String(id);
@@ -134,9 +217,22 @@ function spawnWord() {
   const y = Math.random() * maxY;
   const { vx, vy } = randomVelocity();
 
-  state.words.push({ id, text: word, x, y, vx, vy, w: width, h: height, el, popped: false, angle: 0, lastBounce: 0 });
+  state.words.push({
+    id,
+    text: word,
+    x,
+    y,
+    vx,
+    vy,
+    w: width,
+    h: height,
+    el,
+    popped: false,
+    angle: 0,
+    lastBounce: 0,
+  });
   updateWordPosition(state.words[state.words.length - 1]);
-  requestAnimationFrame(() => el.classList.remove('spawn'));
+  requestAnimationFrame(() => el.classList.remove("spawn"));
   renderCounts();
 }
 
@@ -198,33 +294,33 @@ function tick(now) {
 function popWord(word) {
   if (!word || word.popped) return;
   word.popped = true;
-  word.el.classList.add('popping');
+  word.el.classList.add("popping");
   const gain = word.text.length;
   state.score += gain;
   state.popped += 1;
   state.streak += 1;
   state.bestStreak = Math.max(state.bestStreak, state.streak);
   renderCounts();
-  word.el.addEventListener('animationend', () => {
+  word.el.addEventListener("animationend", () => {
     word.el.remove();
   });
-  state.words = state.words.filter(w => w.id !== word.id);
+  state.words = state.words.filter((w) => w.id !== word.id);
 }
 
 function handleInput(value) {
   const target = value.trim().toLowerCase();
   if (!target) return;
-  const match = state.words.find(w => w.text.toLowerCase() === target);
+  const match = state.words.find((w) => w.text.toLowerCase() === target);
   if (match) {
     popWord(match);
   } else {
     state.score -= target.length;
     state.streak = 0;
     renderCounts();
-    input.classList.add('shake');
-    setTimeout(() => input.classList.remove('shake'), 180);
+    input.classList.add("shake");
+    setTimeout(() => input.classList.remove("shake"), 180);
   }
-  input.value = '';
+  input.value = "";
 }
 
 function startGame() {
@@ -236,7 +332,7 @@ function startGame() {
   state.timeLeft = 60;
   state.lastTick = performance.now();
   startBtn.disabled = true;
-  overlay.classList.add('hidden');
+  overlay.classList.add("hidden");
   spawnWord();
   state.spawnTimer = setInterval(spawnWord, 1000);
   state.countdownTimer = setInterval(() => {
@@ -256,7 +352,7 @@ function startGame() {
 function stopGame() {
   resetGame();
   startBtn.disabled = false;
-  overlay.classList.add('hidden');
+  overlay.classList.add("hidden");
 }
 
 function endGame() {
@@ -267,9 +363,9 @@ function endGame() {
   state.spawnTimer = null;
   state.countdownTimer = null;
   startBtn.disabled = false;
-  overlayTitle.textContent = 'Time!';
+  overlayTitle.textContent = "Time!";
   overlayDetail.textContent = `Level ${state.level} | Words: ${state.popped} | Score: ${state.score} | Best streak: ${state.bestStreak}`;
-  overlay.classList.remove('hidden');
+  overlay.classList.remove("hidden");
 }
 
 function resetGame() {
@@ -284,7 +380,7 @@ function resetGame() {
   state.streak = 0;
   state.bestStreak = 0;
   state.timeLeft = 60;
-  state.words.forEach(w => w.el.remove());
+  state.words.forEach((w) => w.el.remove());
   state.words = [];
   renderCounts();
 }
@@ -297,22 +393,22 @@ function renderCounts() {
   activeCountEl.textContent = state.words.length;
 }
 
-startBtn.addEventListener('click', startGame);
-stopBtn.addEventListener('click', stopGame);
-restartBtn.addEventListener('click', startGame);
+startBtn.addEventListener("click", startGame);
+stopBtn.addEventListener("click", stopGame);
+restartBtn.addEventListener("click", startGame);
 
-form.addEventListener('submit', (e) => {
+form.addEventListener("submit", (e) => {
   e.preventDefault();
   if (!state.running) return;
   handleInput(input.value);
 });
 
-input.addEventListener('focus', () => {
+input.addEventListener("focus", () => {
   if (!state.running) return;
   input.select();
 });
 
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
   // Keep words within bounds if window shrinks.
   const bounds = playfield.getBoundingClientRect();
   for (const word of state.words) {
@@ -335,13 +431,13 @@ window.addEventListener('resize', () => {
 });
 
 function applyTheme(theme) {
-  THEMES.forEach(t => document.body.classList.remove(`theme-${t}`));
+  THEMES.forEach((t) => document.body.classList.remove(`theme-${t}`));
   if (THEMES.includes(theme)) {
     document.body.classList.add(`theme-${theme}`);
     state.theme = theme;
   }
-  themeButtons.forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.theme === theme);
+  themeButtons.forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.theme === theme);
   });
 }
 
@@ -349,9 +445,9 @@ function initFloaters() {
   const innerW = Math.max(LEVEL_GUTTER, frame.clientWidth - LEVEL_GUTTER);
   const innerH = frame.clientHeight;
   const entries = [
-    { key: 'hero', el: heroBox, anchor: () => ({ x: 20, y: 20 }) },
+    { key: "hero", el: heroBox, anchor: () => ({ x: 20, y: 20 }) },
     {
-      key: 'stats',
+      key: "stats",
       el: statsBox,
       anchor: () => {
         const rect = statsBox.getBoundingClientRect();
@@ -359,16 +455,19 @@ function initFloaters() {
       },
     },
     {
-      key: 'controls',
+      key: "controls",
       el: controlsBox,
       anchor: () => {
         const rect = controlsBox.getBoundingClientRect();
-        return { x: Math.max(20, (innerW - rect.width) / 2), y: innerH - rect.height - 20 };
+        return {
+          x: Math.max(20, (innerW - rect.width) / 2),
+          y: innerH - rect.height - 20,
+        };
       },
     },
   ];
 
-  state.floaters = entries.map(entry => {
+  state.floaters = entries.map((entry) => {
     const rect = { width: entry.el.offsetWidth, height: entry.el.offsetHeight };
     const { x, y } = entry.anchor();
     const { vx, vy } = randomVelocity();
@@ -393,7 +492,10 @@ function initFloaters() {
 }
 
 function updateFloaters(delta, now = performance.now()) {
-  const bounds = { w: Math.max(LEVEL_GUTTER, frame.clientWidth - LEVEL_GUTTER), h: frame.clientHeight };
+  const bounds = {
+    w: Math.max(LEVEL_GUTTER, frame.clientWidth - LEVEL_GUTTER),
+    h: frame.clientHeight,
+  };
   for (const floater of state.floaters) {
     if (floater.pinned) continue;
     floater.w = floater.el.offsetWidth;
@@ -438,24 +540,24 @@ function updateFloaters(delta, now = performance.now()) {
   }
 }
 
-pinToggles.forEach(toggle => {
-  toggle.addEventListener('change', () => {
+pinToggles.forEach((toggle) => {
+  toggle.addEventListener("change", () => {
     const key = toggle.dataset.floater;
-    const floater = state.floaters.find(f => f.key === key);
+    const floater = state.floaters.find((f) => f.key === key);
     if (floater) {
       floater.pinned = toggle.checked;
     }
   });
 });
 
-themeButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
+themeButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
     applyTheme(btn.dataset.theme);
   });
 });
 
-levelButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
+levelButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
     setLevel(btn.dataset.level);
   });
 });
@@ -464,16 +566,16 @@ function checkMobileOverlay() {
   if (!mobileOverlay || state.mobileDismissed) return;
   const smallSide = Math.min(window.innerWidth, window.innerHeight);
   if (smallSide < 720) {
-    mobileOverlay.classList.remove('hidden');
+    mobileOverlay.classList.remove("hidden");
   } else {
-    mobileOverlay.classList.add('hidden');
+    mobileOverlay.classList.add("hidden");
   }
 }
 
 if (mobileContinue) {
-  mobileContinue.addEventListener('click', () => {
+  mobileContinue.addEventListener("click", () => {
     state.mobileDismissed = true;
-    mobileOverlay.classList.add('hidden');
+    mobileOverlay.classList.add("hidden");
   });
 }
 
@@ -486,10 +588,10 @@ requestAnimationFrame(tick);
 
 function hideIntro() {
   if (introOverlay) {
-    introOverlay.classList.add('hidden');
+    introOverlay.classList.add("hidden");
   }
 }
 
 if (introClose) {
-  introClose.addEventListener('click', hideIntro);
+  introClose.addEventListener("click", hideIntro);
 }

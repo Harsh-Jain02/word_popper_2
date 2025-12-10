@@ -13,8 +13,8 @@
   --border: rgba(255, 255, 255, 0.08);
   --shadow: 0 20px 60px rgba(0, 0, 0, 0.24);
   --playfield-bg: radial-gradient(90% 90% at 20% 20%, rgba(56, 189, 248, 0.16), transparent 60%), radial-gradient(90% 90% at 80% 20%, rgba(245, 158, 11, 0.14), transparent 70%), #0b1220;
-  --word-bg: rgba(255, 255, 255, 0.9);
-  --word-ink: #0f172a;
+  --word-bg: rgba(255, 255, 255, 0.5);
+  --word-ink: var(--ink);
 }
 
 body.theme-light {
@@ -29,8 +29,8 @@ body.theme-light {
   --border: rgba(15, 23, 42, 0.08);
   --shadow: 0 20px 60px rgba(15, 23, 42, 0.1);
   --playfield-bg: radial-gradient(80% 80% at 20% 20%, rgba(37, 99, 235, 0.12), transparent 60%), radial-gradient(80% 80% at 80% 20%, rgba(14, 165, 233, 0.12), transparent 70%), #e5e7eb;
-  --word-bg: #ffffff;
-  --word-ink: #0f172a;
+  --word-bg: rgba(255, 255, 255, 0.5);
+  --word-ink: var(--ink);
 }
 
 body.theme-neon {
@@ -45,8 +45,8 @@ body.theme-neon {
   --border: rgba(255, 255, 255, 0.08);
   --shadow: 0 20px 60px rgba(34, 211, 238, 0.12);
   --playfield-bg: radial-gradient(90% 90% at 25% 20%, rgba(34, 211, 238, 0.2), transparent 60%), radial-gradient(80% 80% at 80% 20%, rgba(244, 114, 182, 0.18), transparent 70%), #050816;
-  --word-bg: rgba(255, 255, 255, 0.92);
-  --word-ink: #0a0f1f;
+  --word-bg: rgba(255, 255, 255, 0.5);
+  --word-ink: var(--ink);
 }
 
 body.theme-citrus {
@@ -61,8 +61,8 @@ body.theme-citrus {
   --border: rgba(249, 115, 22, 0.25);
   --shadow: 0 20px 60px rgba(249, 115, 22, 0.15);
   --playfield-bg: radial-gradient(80% 80% at 20% 20%, rgba(249, 115, 22, 0.16), transparent 60%), radial-gradient(80% 80% at 80% 20%, rgba(255, 201, 105, 0.14), transparent 70%), #fff7e6;
-  --word-bg: #ffffff;
-  --word-ink: #1f2937;
+  --word-bg: rgba(255, 255, 255, 0.5);
+  --word-ink: var(--ink);
 }
 
 body.theme-crt {
@@ -77,8 +77,8 @@ body.theme-crt {
   --border: rgba(52, 211, 153, 0.22);
   --shadow: 0 20px 60px rgba(4, 27, 17, 0.32);
   --playfield-bg: radial-gradient(85% 85% at 20% 20%, rgba(52, 211, 153, 0.18), transparent 60%), radial-gradient(75% 75% at 80% 20%, rgba(22, 163, 74, 0.16), transparent 70%), #03100a;
-  --word-bg: rgba(255, 255, 255, 0.85);
-  --word-ink: #041b11;
+  --word-bg: rgba(255, 255, 255, 0.5);
+  --word-ink: var(--ink);
 }
 
 body.theme-mint {
@@ -93,8 +93,8 @@ body.theme-mint {
   --border: rgba(16, 185, 129, 0.22);
   --shadow: 0 20px 60px rgba(16, 185, 129, 0.18);
   --playfield-bg: radial-gradient(80% 80% at 20% 20%, rgba(16, 185, 129, 0.14), transparent 60%), radial-gradient(80% 80% at 75% 20%, rgba(56, 189, 248, 0.14), transparent 70%), #e8fff8;
-  --word-bg: #ffffff;
-  --word-ink: #0b172a;
+  --word-bg: rgba(255, 255, 255, 0.5);
+  --word-ink: var(--ink);
 }
 
 * {
@@ -357,6 +357,28 @@ input:focus {
   box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 50%, transparent);
 }
 
+.maker-badge {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  backdrop-filter: blur(4px);
+  box-shadow: var(--shadow);
+  pointer-events: none;
+}
+
+.maker-badge span:first-child {
+  color: var(--accent-2);
+}
+
 @media (max-width: 720px) {
   .difficulty-bar {
     top: auto;
@@ -367,6 +389,11 @@ input:focus {
 
   .playfield {
     right: 120px;
+  }
+
+  .maker-badge {
+    bottom: 10px;
+    right: 10px;
   }
 }
 
