@@ -1,0 +1,17 @@
+@media (max-width: 720px) {
+  .difficulty-bar {
+    top: auto;
+    bottom: 16px;
+    transform: none;
+    right: 12px;
+  }
+
+  .playfield {
+    right: 120px;
+  }
+
+  .maker-badge {
+    bottom: 10px;
+    right: 10px;
+  }
+}

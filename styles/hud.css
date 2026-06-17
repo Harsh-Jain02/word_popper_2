@@ -1,0 +1,109 @@
+.stats {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 16px;
+  gap: 12px;
+  background: var(--panel-alpha);
+  backdrop-filter: blur(6px);
+  min-width: 360px;
+  transition: transform 120ms ease-out;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.value {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.game-controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  background: var(--panel-alpha);
+  backdrop-filter: blur(6px);
+  z-index: 3;
+  min-width: min(560px, 90vw);
+  transition: transform 120ms ease-out;
+}
+
+#entry-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.controls-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+input {
+  border-radius: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  font: inherit;
+  outline: none;
+  background: white;
+  transition: box-shadow 140ms ease, border-color 140ms ease;
+}
+
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+}
+
+.shake {
+  animation: shake 180ms ease;
+}
+
+.shake:focus {
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.4);
+}
+
+.hint {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.pin-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  user-select: none;
+}
+
+.pin-toggle input {
+  accent-color: var(--accent-2);
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+.stats-pin {
+  grid-column: 1 / -1;
+  justify-self: end;
+}

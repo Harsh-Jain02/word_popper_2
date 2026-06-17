@@ -1,0 +1,21 @@
+.maker-badge {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  backdrop-filter: blur(4px);
+  box-shadow: var(--shadow);
+  pointer-events: none;
+}
+
+.maker-badge span:first-child {
+  color: var(--accent-2);
+}
