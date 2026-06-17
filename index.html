@@ -9,160 +9,147 @@
   <body>
     <main class="page">
       <div id="frame" class="frame">
-        <header class="hero">
-          <div>
-            <p class="eyebrow">Speed type challenge</p>
-            <h1>Word Popper</h1>
-            <p class="lede">
-              Type words to pop them before the minute runs out. A new word
-              drifts in every second.
-            </p>
-            <div class="hero-actions">
-              <button id="start-btn" class="primary" type="button">
-                Start
-              </button>
-              <button id="stop-btn" class="secondary ghost" type="button">
-                Stop
-              </button>
-            </div>
-            <div class="theme-picker">
-              <span class="label">Theme</span>
-              <div class="theme-buttons">
-                <button type="button" class="chip" data-theme="dark">
-                  Dark
-                </button>
-                <button type="button" class="chip" data-theme="light">
-                  Light
-                </button>
-                <button type="button" class="chip" data-theme="neon">
-                  Neon
-                </button>
-                <button type="button" class="chip" data-theme="citrus">
-                  Citrus glow
-                </button>
-                <button type="button" class="chip" data-theme="crt">
-                  Retro CRT
-                </button>
-                <button type="button" class="chip" data-theme="mint">
-                  Mint sky
-                </button>
-              </div>
-            </div>
-            <label class="pin-toggle">
-              <input type="checkbox" data-floater="hero" />
-              <span>Freeze title</span>
-            </label>
-          </div>
-        </header>
-
-        <div class="panel stats">
-          <div class="stat">
-            <span class="label">Words</span>
-            <span class="value" id="popped-count">0</span>
-          </div>
-          <div class="stat">
-            <span class="label">Score</span>
-            <span class="value" id="score">0</span>
-          </div>
-          <div class="stat">
-            <span class="label">Streak</span>
-            <span class="value" id="streak">0</span>
-          </div>
-          <div class="stat">
-            <span class="label">Time</span>
-            <span class="value" id="timer">60s</span>
-          </div>
-          <div class="stat">
-            <span class="label">Active</span>
-            <span class="value" id="active-count">0</span>
-          </div>
-          <label class="pin-toggle stats-pin">
-            <input type="checkbox" data-floater="stats" />
-            <span>Freeze score</span>
-          </label>
-        </div>
-
-        <aside class="difficulty-bar" aria-label="Difficulty levels">
-          <div class="level-header">
-            <span class="label">Level</span>
-            <span id="level-detail" class="level-detail"
-              >Level 1: Static words</span
-            >
-          </div>
-          <div class="level-buttons" role="group" aria-label="Select level">
-            <button type="button" class="level-btn active" data-level="1">
-              1
-            </button>
-            <button type="button" class="level-btn" data-level="2">2</button>
-            <button type="button" class="level-btn" data-level="3">3</button>
-            <button type="button" class="level-btn" data-level="4">4</button>
-            <button type="button" class="level-btn" data-level="5">5</button>
-            <button type="button" class="level-btn" data-level="6">6</button>
-          </div>
-        </aside>
+        <div class="fixed-title">Word Popper</div>
 
         <section class="panel game-shell">
           <div class="game-controls">
-            <div class="controls-row">
-              <label class="pin-toggle">
-                <input type="checkbox" data-floater="controls" />
-                <span>Freeze input</span>
-              </label>
-            </div>
             <form id="entry-form" autocomplete="off">
               <input
                 id="word-input"
                 name="word"
-                placeholder="Type a word and hit Enter"
+                placeholder="Type word"
                 spellcheck="false"
                 autocomplete="off"
               />
               <button type="submit" class="secondary">Pop</button>
             </form>
-            <div class="hint">
-              Words appear every second; movement kicks in from Level 2. Pop as
-              many as you can in 60 seconds.
+          </div>
+
+          <div id="playfield" class="playfield" aria-live="polite"></div>
+
+          <div class="stats-dock" aria-label="Game stats">
+            <div class="stat">
+              <span class="label">Words</span>
+              <span class="value" id="popped-count">0</span>
+            </div>
+            <div class="stat">
+              <span class="label">Score</span>
+              <span class="value" id="score">0</span>
+            </div>
+            <div class="stat">
+              <span class="label">Streak</span>
+              <span class="value" id="streak">0</span>
+            </div>
+            <div class="stat">
+              <span class="label">Time</span>
+              <span class="value" id="timer">60s</span>
+            </div>
+            <div class="stat wide-stat">
+              <span class="label">Active</span>
+              <span class="value" id="active-count">0</span>
             </div>
           </div>
-          <div id="playfield" class="playfield" aria-live="polite"></div>
+
+          <button id="stop-btn" class="emergency-stop" type="button" disabled>
+            Emergency Stop
+          </button>
+
           <div id="overlay" class="overlay hidden">
-            <div class="overlay-card">
+            <div class="overlay-card result-card">
               <p id="overlay-title" class="overlay-title"></p>
               <p id="overlay-detail" class="overlay-detail"></p>
+              <p class="result-maker">
+                <span aria-hidden="true">&hearts;</span>
+                Made with love by Harsh Jain
+              </p>
               <button id="restart-btn" class="primary ghost" type="button">
                 Play again
               </button>
             </div>
           </div>
-          <div id="intro-overlay" class="overlay intro">
-            <div class="overlay-card">
-              <p class="overlay-title">How to play</p>
-              <ul class="overlay-list">
-                <li>Press Start. A new word appears every second.</li>
-                <li>Type a word and hit Enter/Pop to pop it.</li>
-                <li>
-                  Score = word length; wrong entry subtracts the characters you
-                  typed.
-                </li>
-                <li>
-                  Streak counts consecutive correct pops; track
-                  Words/Score/Streak in the stats bubble.
-                </li>
-                <li>
-                  Levels stack features: 1 static words; 2 moving words; 3
-                  floating HUD; 4 adds bounce rotation; 5 swaps themes every
-                  second; 6 swaps themes at hyper speed.
-                </li>
-                <li>
-                  Pick a theme (Dark, Light, Neon, Citrus glow, Retro CRT, Mint
-                  sky) anytime.
-                </li>
-              </ul>
-              <button id="intro-close" class="primary" type="button">
-                Got it
+
+          <div id="config-overlay" class="overlay config">
+            <div class="overlay-card config-card">
+              <p class="overlay-title">Set up your run</p>
+
+              <div class="config-section">
+                <span class="label">Theme</span>
+                <div class="theme-buttons">
+                  <button type="button" class="chip" data-theme="dark">
+                    Dark
+                  </button>
+                  <button type="button" class="chip" data-theme="light">
+                    Light
+                  </button>
+                  <button type="button" class="chip" data-theme="neon">
+                    Neon
+                  </button>
+                  <button type="button" class="chip" data-theme="citrus">
+                    Citrus glow
+                  </button>
+                  <button type="button" class="chip" data-theme="crt">
+                    Retro CRT
+                  </button>
+                  <button type="button" class="chip" data-theme="mint">
+                    Mint sky
+                  </button>
+                </div>
+              </div>
+
+              <div class="config-section">
+                <span class="label">Level</span>
+                <div class="level-choices" role="group" aria-label="Select level">
+                  <button type="button" class="level-card active" data-level="1">
+                    <span>Warmup</span>
+                    <small>Static words, clean aim.</small>
+                  </button>
+                  <button type="button" class="level-card" data-level="2">
+                    <span>Drift</span>
+                    <small>Words start moving.</small>
+                  </button>
+                  <button type="button" class="level-card" data-level="3">
+                    <span>Ricochet</span>
+                    <small>Fast movement with bounce turns.</small>
+                  </button>
+                  <button type="button" class="level-card chaos-card" data-level="4">
+                    <span>Chaos</span>
+                    <small>Flicker, panic, and unstable words.</small>
+                  </button>
+                </div>
+                <p id="level-comment" class="level-comment">
+                  Warmup selected. A clean arena for precision popping.
+                </p>
+              </div>
+
+              <div class="config-section">
+                <div class="duration-header">
+                  <span class="label">Game length</span>
+                  <span id="duration-value" class="duration-value">60s</span>
+                </div>
+                <input
+                  id="duration-slider"
+                  class="duration-slider"
+                  type="range"
+                  min="0"
+                  max="3"
+                  step="1"
+                  value="2"
+                  aria-label="Choose game length"
+                />
+                <div class="duration-marks" aria-hidden="true">
+                  <span>30s</span>
+                  <span>45s</span>
+                  <span>60s</span>
+                  <span>90s</span>
+                </div>
+              </div>
+
+              <button id="start-btn" class="primary start-run" type="button">
+                Start run
               </button>
             </div>
           </div>
+
           <div id="mobile-overlay" class="overlay mobile hidden">
             <div class="overlay-card">
               <p class="overlay-title">Best on a computer</p>
@@ -176,19 +163,15 @@
             </div>
           </div>
         </section>
-        <div class="maker-badge" aria-label="Made with love by Harsh Jain">
-          <span aria-hidden="true">&hearts;</span>
-          <span>Made with love by Harsh Jain</span>
-        </div>
       </div>
     </main>
 
+    <script src="scripts/wordBank.js"></script>
     <script src="scripts/config.js"></script>
     <script src="scripts/dom.js"></script>
     <script src="scripts/state.js"></script>
     <script src="scripts/utils.js"></script>
     <script src="scripts/themes.js"></script>
-    <script src="scripts/floaters.js"></script>
     <script src="scripts/game.js"></script>
     <script src="scripts/events.js"></script>
     <script src="scripts/main.js"></script>

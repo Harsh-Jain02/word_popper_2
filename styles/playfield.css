@@ -1,9 +1,6 @@
 .playfield {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 150px;
-  bottom: 0;
+  inset: 0;
   height: 100%;
   overflow: hidden;
   background: var(--playfield-bg);
@@ -43,11 +40,45 @@
   animation: float-in 320ms ease;
 }
 
+body.chaos-mode .playfield {
+  animation: chaos-light 180ms steps(2, end) infinite;
+}
+
+body.chaos-mode .word:not(.popping) {
+  animation: chaos-word 420ms ease-in-out infinite alternate;
+  text-shadow:
+    2px 0 rgba(34, 211, 238, 0.8),
+    -2px 0 rgba(244, 114, 182, 0.8);
+}
+
 @keyframes pop {
   to {
     transform: scale(1.2);
     opacity: 0;
     filter: blur(2px);
+  }
+}
+
+@keyframes chaos-light {
+  0% {
+    filter: saturate(1.2) brightness(0.92);
+  }
+  50% {
+    filter: saturate(2.2) brightness(1.28) contrast(1.18);
+  }
+  100% {
+    filter: saturate(1.4) brightness(1.04);
+  }
+}
+
+@keyframes chaos-word {
+  from {
+    letter-spacing: 0;
+    filter: hue-rotate(0deg);
+  }
+  to {
+    letter-spacing: 0.04em;
+    filter: hue-rotate(70deg);
   }
 }
 

@@ -1,6 +1,6 @@
 startBtn.addEventListener("click", startGame);
-stopBtn.addEventListener("click", stopGame);
-restartBtn.addEventListener("click", startGame);
+stopBtn.addEventListener("click", emergencyStopGame);
+restartBtn.addEventListener("click", showConfigOverlay);
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -21,27 +21,7 @@ window.addEventListener("resize", () => {
     updateWordPosition(word);
   }
 
-  const vw = Math.max(LEVEL_GUTTER, frame.clientWidth - LEVEL_GUTTER);
-  const vh = frame.clientHeight;
-  for (const floater of state.floaters) {
-    floater.w = floater.el.offsetWidth;
-    floater.h = floater.el.offsetHeight;
-    floater.x = Math.min(floater.x, Math.max(0, vw - floater.w));
-    floater.y = Math.min(floater.y, Math.max(0, vh - floater.h));
-    floater.el.style.transform = `translate(${floater.x}px, ${floater.y}px)`;
-  }
-
   checkMobileOverlay();
-});
-
-pinToggles.forEach((toggle) => {
-  toggle.addEventListener("change", () => {
-    const key = toggle.dataset.floater;
-    const floater = state.floaters.find((f) => f.key === key);
-    if (floater) {
-      floater.pinned = toggle.checked;
-    }
-  });
 });
 
 themeButtons.forEach((btn) => {
@@ -56,6 +36,22 @@ levelButtons.forEach((btn) => {
   });
 });
 
+if (durationSlider) {
+  durationSlider.addEventListener("input", () => {
+    setDurationByIndex(durationSlider.value);
+  });
+}
+
+function showConfigOverlay() {
+  overlay.classList.add("hidden");
+  configOverlay.classList.remove("hidden");
+  resetGame();
+}
+
+function hideConfigOverlay() {
+  configOverlay.classList.add("hidden");
+}
+
 function checkMobileOverlay() {
   if (!mobileOverlay || state.mobileDismissed) return;
   const smallSide = Math.min(window.innerWidth, window.innerHeight);
@@ -66,19 +62,9 @@ function checkMobileOverlay() {
   }
 }
 
-function hideIntro() {
-  if (introOverlay) {
-    introOverlay.classList.add("hidden");
-  }
-}
-
 if (mobileContinue) {
   mobileContinue.addEventListener("click", () => {
     state.mobileDismissed = true;
     mobileOverlay.classList.add("hidden");
   });
-}
-
-if (introClose) {
-  introClose.addEventListener("click", hideIntro);
 }

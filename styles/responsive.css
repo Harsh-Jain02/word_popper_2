@@ -1,17 +1,48 @@
-@media (max-width: 720px) {
-  .difficulty-bar {
-    top: auto;
-    bottom: 16px;
-    transform: none;
-    right: 12px;
+@media (max-width: 760px) {
+  .frame {
+    inset: 12px;
   }
 
-  .playfield {
-    right: 120px;
+  .fixed-title {
+    top: 12px;
+    left: 14px;
+    font-size: 21px;
   }
 
-  .maker-badge {
+  .stats-dock {
+    left: 10px;
     bottom: 10px;
+    width: 154px;
+    gap: 6px 10px;
+  }
+
+  .emergency-stop {
     right: 10px;
+    bottom: 10px;
+    min-width: 154px;
+  }
+
+  .game-controls {
+    left: 50%;
+    bottom: 120px;
+    width: min(320px, calc(100% - 40px));
+    min-width: 0;
+    transform: translateX(-50%);
+  }
+
+  .level-choices {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .level-choices {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-dock,
+  .emergency-stop {
+    width: 142px;
+    min-width: 142px;
   }
 }

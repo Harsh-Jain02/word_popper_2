@@ -1,60 +1,100 @@
-.difficulty-bar {
-  position: absolute;
-  top: 50%;
-  right: 16px;
-  transform: translateY(-50%);
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
+.level-choices {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
-  width: 120px;
-  padding: 12px 14px;
-  background: var(--panel-alpha);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(6px);
 }
 
-.difficulty-bar .label {
-  color: var(--muted);
-}
-
-.level-header {
+.level-card {
   display: flex;
+  min-height: 96px;
   flex-direction: column;
-  gap: 4px;
-}
-
-.level-detail {
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.level-buttons {
-  display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   gap: 8px;
-}
-
-.level-btn {
-  width: 100%;
-  padding: 10px 0;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.05);
-  color: var(--ink);
+  color: white;
+  text-align: left;
+  box-shadow: none;
+}
+
+.level-card span {
+  font-size: 17px;
   font-weight: 700;
-  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
 }
 
-.level-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
+.level-card small {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+  line-height: 1.35;
 }
 
-.level-btn.active {
+.level-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.level-card.active {
   background: var(--accent);
   color: #0b1220;
   border-color: transparent;
-  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 50%, transparent);
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.level-card.active small {
+  color: rgba(11, 18, 32, 0.72);
+}
+
+.chaos-card {
+  border-color: rgba(244, 114, 182, 0.3);
+}
+
+.chaos-card.active {
+  background: linear-gradient(135deg, #f97316, #ec4899, #22d3ee);
+  color: #06111f;
+}
+
+.level-comment {
+  min-height: 22px;
+  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.duration-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.duration-value {
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.duration-slider {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.duration-marks {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+}
+
+.duration-marks span:nth-child(2) {
+  text-align: center;
+}
+
+.duration-marks span:nth-child(3) {
+  text-align: center;
+}
+
+.duration-marks span:last-child {
+  text-align: right;
 }

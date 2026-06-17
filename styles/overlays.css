@@ -8,7 +8,7 @@
   z-index: 4;
 }
 
-.overlay.intro {
+.overlay.config {
   background: rgba(5, 8, 22, 0.7);
   z-index: 6;
 }
@@ -31,6 +31,26 @@
   border: 1px solid rgba(255, 255, 255, 0.06);
   text-align: center;
   width: min(540px, calc(100vw - 48px));
+}
+
+.config-card {
+  display: grid;
+  gap: 18px;
+  text-align: left;
+  width: min(780px, calc(100vw - 48px));
+}
+
+.config-card .overlay-title {
+  text-align: center;
+}
+
+.config-section {
+  display: grid;
+  gap: 8px;
+}
+
+.result-card {
+  width: min(460px, calc(100vw - 48px));
 }
 
 .overlay-title {

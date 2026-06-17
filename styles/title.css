@@ -1,0 +1,11 @@
+.fixed-title {
+  position: absolute;
+  top: 16px;
+  left: 18px;
+  z-index: 3;
+  color: var(--ink);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
