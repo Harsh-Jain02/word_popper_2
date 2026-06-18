@@ -4,18 +4,7 @@ function getLevelConfig(level = state.level) {
 
 function getWordPool() {
   const categoryWords = WORD_CATEGORIES[state.category] || WORD_CATEGORIES.general;
-  const pool = Array.from(new Set(categoryWords));
-  const filtered = pool.filter((word) =>
-    wordMatchesDifficulty(word, state.wordDifficulty)
-  );
-  return filtered.length ? filtered : pool;
-}
-
-function wordMatchesDifficulty(word, difficulty) {
-  const length = word.length;
-  if (difficulty === "easy") return length <= 5;
-  if (difficulty === "medium") return length >= 6 && length <= 8;
-  return length >= 9;
+  return Array.from(new Set(categoryWords));
 }
 
 function setDurationByIndex(index) {

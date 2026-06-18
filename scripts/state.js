@@ -25,7 +25,6 @@ const state = {
   theme: "dark",
   level: 1,
   category: "general",
-  wordDifficulty: "easy",
   accessibility: false,
   paused: false,
   rotationEnabled: false,

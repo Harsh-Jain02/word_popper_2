@@ -12,16 +12,6 @@ const CATEGORY_LABELS = {
   kidsMath: "Kid math",
   kidsValues: "Kind words",
 };
-const WORD_DIFFICULTY_LABELS = {
-  easy: "Easy",
-  medium: "Medium",
-  hard: "Hard",
-};
-const WORD_DIFFICULTY_COMMENTS = {
-  easy: "Easy words loaded. Quick pops, shorter targets, cleaner streaks.",
-  medium: "Medium words loaded. Bigger targets for sharper typing hands.",
-  hard: "Hard words loaded. Long words, spicy spelling, serious score potential.",
-};
 const POWER_UP_CHANCE = 0.12;
 const COMBO_STEPS = [
   { streak: 5, multiplier: 2 },
@@ -78,7 +68,7 @@ const LEVELS = {
     rotates: true,
     speedMin: 95,
     speedMax: 220,
-    comment: "Ricochet Rush selected. Bouncing targets enter the arena. Word danger is your call.",
+    comment: "Ricochet Rush selected. Bouncing targets enter the arena with sharper movement.",
   },
   4: {
     name: "Chaos Rift",

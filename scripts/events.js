@@ -43,12 +43,6 @@ categoryButtons.forEach((btn) => {
   });
 });
 
-difficultyButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    setWordDifficulty(btn.dataset.wordDifficulty);
-  });
-});
-
 if (durationSlider) {
   durationSlider.addEventListener("input", () => {
     setDurationByIndex(durationSlider.value);
@@ -76,16 +70,6 @@ function setCategory(category) {
   categoryButtons.forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.category === state.category);
   });
-}
-
-function setWordDifficulty(difficulty) {
-  state.wordDifficulty = WORD_DIFFICULTY_LABELS[difficulty] ? difficulty : "easy";
-  difficultyButtons.forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.wordDifficulty === state.wordDifficulty);
-  });
-  if (difficultyComment) {
-    difficultyComment.textContent = WORD_DIFFICULTY_COMMENTS[state.wordDifficulty];
-  }
 }
 
 function setAccessibility(enabled) {

@@ -1,9 +1,18 @@
 function spawnWord() {
   if (!state.running || state.paused) return;
-  const available = getWordPool().filter(
-    (word) => !state.usedWords.has(word.toLowerCase())
-  );
+  const wordPool = getWordPool();
+  let available = getAvailableSpawnWords(wordPool);
   const powerChoice = pickPowerUp();
+
+  if (!available.length && hasUsedEveryNormalWord(wordPool)) {
+    resetUsedNormalWords(wordPool);
+    available = getAvailableSpawnWords(wordPool);
+
+    if (!available.length) {
+      available = getAvailableSpawnWords(wordPool, { avoidActiveWords: false });
+    }
+  }
+
   if (!available.length && !powerChoice) return;
 
   const config = getLevelConfig();
@@ -51,6 +60,33 @@ function spawnWord() {
   updateWordPosition(state.words[state.words.length - 1]);
   requestAnimationFrame(() => el.classList.remove("spawn"));
   renderCounts();
+}
+
+function getAvailableSpawnWords(wordPool, options = {}) {
+  const avoidActiveWords = options.avoidActiveWords !== false;
+  const activeWords = new Set(
+    state.words
+      .filter((word) => !word.popped)
+      .map((word) => word.text.toLowerCase())
+  );
+
+  return wordPool.filter((word) => {
+    const normalized = word.toLowerCase();
+    return (
+      !state.usedWords.has(normalized) &&
+      (!avoidActiveWords || !activeWords.has(normalized))
+    );
+  });
+}
+
+function hasUsedEveryNormalWord(wordPool) {
+  return wordPool.every((word) => state.usedWords.has(word.toLowerCase()));
+}
+
+function resetUsedNormalWords(wordPool) {
+  for (const word of wordPool) {
+    state.usedWords.delete(word.toLowerCase());
+  }
 }
 
 function pickPowerUp() {
@@ -240,8 +276,7 @@ function endGame(title) {
   document.body.classList.remove("paused-mode");
   overlayTitle.textContent = title;
   const categoryLabel = CATEGORY_LABELS[state.category] || "General";
-  const difficultyLabel = WORD_DIFFICULTY_LABELS[state.wordDifficulty] || "Easy";
-  overlayDetail.textContent = `${config.name} | ${difficultyLabel} words | ${state.duration}s | ${categoryLabel} realm | Final score ${state.score}`;
+  overlayDetail.textContent = `${config.name} | ${state.duration}s | ${categoryLabel} realm | Final score ${state.score}`;
   renderBreakdown();
   overlay.classList.remove("hidden");
   renderCounts();
