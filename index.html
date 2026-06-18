@@ -41,15 +41,22 @@
               <span class="value" id="streak">0</span>
             </div>
             <div class="stat">
+              <span class="label">Combo</span>
+              <span class="value" id="combo">x1</span>
+            </div>
+            <div class="stat">
               <span class="label">Time</span>
               <span class="value" id="timer">60s</span>
             </div>
-            <div class="stat wide-stat">
-              <span class="label">Active</span>
-              <span class="value" id="active-count">0</span>
+            <div class="stat">
+              <span class="label">Power</span>
+              <span class="value status-value" id="power-status">Ready</span>
             </div>
           </div>
 
+          <button id="pause-btn" class="pause-btn" type="button" disabled>
+            Pause
+          </button>
           <button id="stop-btn" class="emergency-stop" type="button" disabled>
             Emergency Stop
           </button>
@@ -58,6 +65,7 @@
             <div class="overlay-card result-card">
               <p id="overlay-title" class="overlay-title"></p>
               <p id="overlay-detail" class="overlay-detail"></p>
+              <div id="breakdown" class="breakdown-grid"></div>
               <p class="result-maker">
                 <span aria-hidden="true">&hearts;</span>
                 Made with love by Harsh Jain
@@ -100,24 +108,86 @@
                 <span class="label">Level</span>
                 <div class="level-choices" role="group" aria-label="Select level">
                   <button type="button" class="level-card active" data-level="1">
-                    <span>Warmup</span>
-                    <small>Static words, clean aim.</small>
+                    <span>Training Grounds</span>
+                    <small>Still targets. Build your pop rhythm.</small>
                   </button>
                   <button type="button" class="level-card" data-level="2">
-                    <span>Drift</span>
-                    <small>Words start moving.</small>
+                    <span>Drift Dash</span>
+                    <small>Words glide across the arena.</small>
                   </button>
                   <button type="button" class="level-card" data-level="3">
-                    <span>Ricochet</span>
-                    <small>Fast movement with bounce turns.</small>
+                    <span>Ricochet Rush</span>
+                    <small>Fast bounces. Pick word danger below.</small>
                   </button>
                   <button type="button" class="level-card chaos-card" data-level="4">
-                    <span>Chaos</span>
-                    <small>Flicker, panic, and unstable words.</small>
+                    <span>Chaos Rift</span>
+                    <small>Playable mayhem for brave fingers.</small>
+                  </button>
+                  <button type="button" class="level-card chaos-card danger-card" data-level="5">
+                    <span>Doom Spiral</span>
+                    <small>Nearly unfair. Enter only for pain.</small>
                   </button>
                 </div>
                 <p id="level-comment" class="level-comment">
-                  Warmup selected. A clean arena for precision popping.
+                  Training Grounds selected. Calm targets, clean pops, heroic fundamentals.
+                </p>
+                <p id="chaos-warning" class="chaos-warning hidden">
+                  Epilepsy warning: Doom Spiral uses rapid flicker, shake, and intense motion.
+                  Use Accessibility Assist if flashing or motion is uncomfortable.
+                </p>
+              </div>
+
+              <div class="config-section">
+                <span class="label">Word realm</span>
+                <div class="category-buttons" role="group" aria-label="Select word category">
+                  <button type="button" class="chip active" data-category="general">
+                    General
+                  </button>
+                  <button type="button" class="chip" data-category="programming">
+                    Programming
+                  </button>
+                  <button type="button" class="chip" data-category="animals">
+                    Animals
+                  </button>
+                  <button type="button" class="chip" data-category="space">
+                    Space
+                  </button>
+                  <button type="button" class="chip" data-category="finance">
+                    Finance
+                  </button>
+                  <button type="button" class="chip" data-category="spelling">
+                    Hard spelling
+                  </button>
+                  <button type="button" class="chip" data-category="hindiMix">
+                    Hindi mix
+                  </button>
+                  <button type="button" class="chip" data-category="kidsScience">
+                    Kid science
+                  </button>
+                  <button type="button" class="chip" data-category="kidsMath">
+                    Kid math
+                  </button>
+                  <button type="button" class="chip" data-category="kidsValues">
+                    Kind words
+                  </button>
+                </div>
+              </div>
+
+              <div class="config-section">
+                <span class="label">Word difficulty</span>
+                <div class="difficulty-buttons" role="group" aria-label="Select word difficulty">
+                  <button type="button" class="chip active" data-word-difficulty="easy">
+                    Easy
+                  </button>
+                  <button type="button" class="chip" data-word-difficulty="medium">
+                    Medium
+                  </button>
+                  <button type="button" class="chip" data-word-difficulty="hard">
+                    Hard
+                  </button>
+                </div>
+                <p id="difficulty-comment" class="level-comment">
+                  Easy words loaded. Quick pops, shorter targets, cleaner streaks.
                 </p>
               </div>
 
@@ -143,6 +213,14 @@
                   <span>90s</span>
                 </div>
               </div>
+
+              <label class="assist-toggle">
+                <input id="accessibility-toggle" type="checkbox" />
+                <span>
+                  Accessibility Assist
+                  <small>larger words, calmer motion, no flicker, stronger contrast</small>
+                </span>
+              </label>
 
               <button id="start-btn" class="primary start-run" type="button">
                 Start run
@@ -171,6 +249,7 @@
     <script src="scripts/dom.js"></script>
     <script src="scripts/state.js"></script>
     <script src="scripts/utils.js"></script>
+    <script src="scripts/scoring.js"></script>
     <script src="scripts/themes.js"></script>
     <script src="scripts/game.js"></script>
     <script src="scripts/events.js"></script>

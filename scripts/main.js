@@ -1,5 +1,8 @@
 applyTheme(state.theme);
 setLevel(state.level);
+setCategory(state.category);
+setWordDifficulty(state.wordDifficulty);
+setAccessibility(false);
 setDurationByIndex(2);
 resetGame();
 checkMobileOverlay();

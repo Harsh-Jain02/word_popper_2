@@ -1,6 +1,7 @@
 startBtn.addEventListener("click", startGame);
 stopBtn.addEventListener("click", emergencyStopGame);
 restartBtn.addEventListener("click", showConfigOverlay);
+pauseBtn.addEventListener("click", togglePause);
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -36,10 +37,67 @@ levelButtons.forEach((btn) => {
   });
 });
 
+categoryButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    setCategory(btn.dataset.category);
+  });
+});
+
+difficultyButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    setWordDifficulty(btn.dataset.wordDifficulty);
+  });
+});
+
 if (durationSlider) {
   durationSlider.addEventListener("input", () => {
     setDurationByIndex(durationSlider.value);
   });
+}
+
+if (accessibilityToggle) {
+  accessibilityToggle.addEventListener("change", () => {
+    setAccessibility(accessibilityToggle.checked);
+  });
+}
+
+window.addEventListener("keydown", (event) => {
+  if (event.key.toLowerCase() !== "p") return;
+  if (!state.running) return;
+  if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+    return;
+  }
+  event.preventDefault();
+  togglePause();
+});
+
+function setCategory(category) {
+  state.category = WORD_CATEGORIES[category] ? category : "general";
+  categoryButtons.forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.category === state.category);
+  });
+}
+
+function setWordDifficulty(difficulty) {
+  state.wordDifficulty = WORD_DIFFICULTY_LABELS[difficulty] ? difficulty : "easy";
+  difficultyButtons.forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.wordDifficulty === state.wordDifficulty);
+  });
+  if (difficultyComment) {
+    difficultyComment.textContent = WORD_DIFFICULTY_COMMENTS[state.wordDifficulty];
+  }
+}
+
+function setAccessibility(enabled) {
+  state.accessibility = Boolean(enabled);
+  document.body.classList.toggle("accessibility-mode", state.accessibility);
+  if (accessibilityToggle) {
+    accessibilityToggle.checked = state.accessibility;
+  }
+  if (state.running && getLevelConfig().chaos) {
+    stopChaosMode();
+    startChaosMode();
+  }
 }
 
 function showConfigOverlay() {

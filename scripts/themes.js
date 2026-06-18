@@ -1,5 +1,5 @@
 function setLevel(level) {
-  const nextLevel = Math.min(4, Math.max(1, Number(level) || 1));
+  const nextLevel = Math.min(5, Math.max(1, Number(level) || 1));
   const config = getLevelConfig(nextLevel);
   state.level = nextLevel;
   state.rotationEnabled = config.rotates;
@@ -10,6 +10,9 @@ function setLevel(level) {
 
   if (levelComment) {
     levelComment.textContent = config.comment;
+  }
+  if (chaosWarning) {
+    chaosWarning.classList.toggle("hidden", !config.chaos);
   }
 }
 

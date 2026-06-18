@@ -1,15 +1,20 @@
 function spawnWord() {
-  if (!state.running) return;
+  if (!state.running || state.paused) return;
   const available = getWordPool().filter(
     (word) => !state.usedWords.has(word.toLowerCase())
   );
-  if (!available.length) return;
+  const powerChoice = pickPowerUp();
+  if (!available.length && !powerChoice) return;
 
   const config = getLevelConfig();
-  const word = available[Math.floor(Math.random() * available.length)];
+  const word = powerChoice
+    ? powerChoice.word
+    : available[Math.floor(Math.random() * available.length)];
   state.usedWords.add(word.toLowerCase());
   const el = document.createElement("span");
-  el.className = "word spawn";
+  el.className = powerChoice
+    ? `word spawn power-word power-${powerChoice.type}`
+    : "word spawn";
   el.textContent = word;
   const id = state.nextId++;
   el.dataset.id = String(id);
@@ -21,8 +26,9 @@ function spawnWord() {
   const maxY = Math.max(0, rect.height - height);
   const x = Math.random() * maxX;
   const y = Math.random() * maxY;
+  const speedFactor = state.accessibility ? 0.55 : 1;
   const velocity = config.moves
-    ? randomVelocity(config.speedMin, config.speedMax)
+    ? randomVelocity(config.speedMin * speedFactor, config.speedMax * speedFactor)
     : { vx: 0, vy: 0 };
 
   state.words.push({
@@ -36,13 +42,24 @@ function spawnWord() {
     h: height,
     el,
     popped: false,
+    powerType: powerChoice ? powerChoice.type : null,
     angle: 0,
     scale: 1,
+    mirror: 1,
     lastBounce: 0,
   });
   updateWordPosition(state.words[state.words.length - 1]);
   requestAnimationFrame(() => el.classList.remove("spawn"));
   renderCounts();
+}
+
+function pickPowerUp() {
+  if (Math.random() > POWER_UP_CHANCE) return null;
+  const options = Object.entries(POWER_UPS)
+    .filter(([, power]) => !state.usedWords.has(power.word.toLowerCase()));
+  if (!options.length) return null;
+  const [type, power] = options[Math.floor(Math.random() * options.length)];
+  return { type, word: power.word };
 }
 
 function startAnimationLoop() {
@@ -56,22 +73,30 @@ function tick(now) {
   state.lastTick = now;
   const config = getLevelConfig();
 
-  if (state.running && config.moves) {
+  if (state.running && !state.paused && config.moves && state.activePower !== "freeze") {
     const bounds = playfield.getBoundingClientRect();
+    const movementDelta = state.activePower === "slow" ? delta * 0.42 : delta;
     for (const word of state.words) {
       if (word.popped) continue;
       if (config.chaos) {
-        word.angle = (word.angle + config.spinRate * delta) % 360;
-        if (Math.random() < config.jitterChance * delta) {
-          const velocity = randomVelocity(config.speedMin, config.speedMax);
+        const chaosFactor = state.accessibility ? 0.38 : 1;
+        word.angle = (word.angle + config.spinRate * chaosFactor * movementDelta) % 360;
+        if (Math.random() < config.jitterChance * chaosFactor * movementDelta) {
+          const velocity = randomVelocity(
+            config.speedMin * chaosFactor,
+            config.speedMax * chaosFactor
+          );
           word.vx = velocity.vx;
           word.vy = velocity.vy;
-          word.scale = 0.86 + Math.random() * 0.34;
+          word.scale = state.accessibility ? 1 : 0.78 + Math.random() * 0.5;
+          if (config.chaosTier >= 2 && !state.accessibility) {
+            word.mirror = Math.random() > 0.55 ? -1 : 1;
+          }
         }
       }
 
-      word.x += word.vx * delta;
-      word.y += word.vy * delta;
+      word.x += word.vx * movementDelta;
+      word.y += word.vy * movementDelta;
       let bounced = false;
 
       if (word.x <= 0) {
@@ -113,27 +138,27 @@ function popWord(word) {
   if (!word || word.popped) return;
   word.popped = true;
   word.el.classList.add("popping");
-  const gain = word.text.length;
-  state.score += gain;
-  state.popped += 1;
-  state.streak += 1;
-  state.bestStreak = Math.max(state.bestStreak, state.streak);
-  word.el.addEventListener("animationend", () => {
-    word.el.remove();
-  });
+  if (word.powerType) {
+    activatePowerUp(word.powerType);
+  } else {
+    awardWordScore(word);
+  }
+  removeWordElement(word);
   state.words = state.words.filter((w) => w.id !== word.id);
   renderCounts();
 }
 
 function handleInput(value) {
+  if (state.paused) return;
   const target = value.trim().toLowerCase();
   if (!target) return;
+  state.attempts += 1;
+  state.typedChars += target.length;
   const match = state.words.find((w) => w.text.toLowerCase() === target);
   if (match) {
     popWord(match);
   } else {
-    state.score -= target.length;
-    state.streak = 0;
+    registerMiss(target);
     renderCounts();
     input.classList.add("shake");
     setTimeout(() => input.classList.remove("shake"), 180);
@@ -151,13 +176,17 @@ function startGame() {
   state.timeLeft = state.duration;
   state.lastTick = performance.now();
   stopBtn.disabled = false;
+  pauseBtn.disabled = false;
+  pauseBtn.textContent = "Pause";
   overlay.classList.add("hidden");
   if (config.chaos) {
     startChaosMode();
   }
   spawnWord();
-  state.spawnTimer = setInterval(spawnWord, config.spawnMs);
+  const spawnMs = state.accessibility ? config.spawnMs + 250 : config.spawnMs;
+  state.spawnTimer = setInterval(spawnWord, spawnMs);
   state.countdownTimer = setInterval(() => {
+    if (state.paused) return;
     state.timeLeft -= 1;
     if (state.timeLeft <= 0) {
       state.timeLeft = 0;
@@ -175,6 +204,27 @@ function emergencyStopGame() {
   endGame("Emergency stop!");
 }
 
+function togglePause() {
+  if (!state.running) return;
+  state.paused = !state.paused;
+  document.body.classList.toggle("paused-mode", state.paused);
+  pauseBtn.textContent = state.paused ? "Resume" : "Pause";
+  if (state.paused && state.activePower && state.powerTimer) {
+    state.powerRemainingMs = Math.max(0, state.powerEndsAt - performance.now());
+    clearTimeout(state.powerTimer);
+    state.powerTimer = null;
+  }
+  if (!state.paused) {
+    if (state.activePower && state.powerRemainingMs > 0) {
+      state.powerEndsAt = performance.now() + state.powerRemainingMs;
+      state.powerTimer = setTimeout(clearActivePower, state.powerRemainingMs);
+      state.powerRemainingMs = 0;
+    }
+    state.lastTick = performance.now();
+    input.focus();
+  }
+}
+
 function endGame(title) {
   const config = getLevelConfig();
   state.running = false;
@@ -184,8 +234,15 @@ function endGame(title) {
   state.spawnTimer = null;
   state.countdownTimer = null;
   stopBtn.disabled = true;
+  pauseBtn.disabled = true;
+  pauseBtn.textContent = "Pause";
+  state.paused = false;
+  document.body.classList.remove("paused-mode");
   overlayTitle.textContent = title;
-  overlayDetail.textContent = `${config.name} run | ${state.duration}s | Score: ${state.score} | Words: ${state.popped} | Best streak: ${state.bestStreak}`;
+  const categoryLabel = CATEGORY_LABELS[state.category] || "General";
+  const difficultyLabel = WORD_DIFFICULTY_LABELS[state.wordDifficulty] || "Easy";
+  overlayDetail.textContent = `${config.name} | ${difficultyLabel} words | ${state.duration}s | ${categoryLabel} realm | Final score ${state.score}`;
+  renderBreakdown();
   overlay.classList.remove("hidden");
   renderCounts();
 }
@@ -195,22 +252,41 @@ function resetGame() {
   clearInterval(state.spawnTimer);
   clearInterval(state.countdownTimer);
   stopChaosMode();
+  clearActivePower();
   state.spawnTimer = null;
   state.countdownTimer = null;
   state.score = 0;
+  state.baseScore = 0;
+  state.comboBonus = 0;
   state.popped = 0;
+  state.attempts = 0;
+  state.misses = 0;
+  state.typedChars = 0;
+  state.poppedChars = 0;
+  state.powerUpsCollected = 0;
   state.streak = 0;
   state.bestStreak = 0;
+  state.comboMultiplier = 1;
+  state.activePower = null;
+  state.powerEndsAt = 0;
+  state.powerRemainingMs = 0;
+  state.paused = false;
+  document.body.classList.remove("paused-mode");
   state.timeLeft = state.duration;
   state.words.forEach((w) => w.el.remove());
   state.words = [];
   state.usedWords.clear();
   stopBtn.disabled = true;
+  pauseBtn.disabled = true;
+  pauseBtn.textContent = "Pause";
   renderCounts();
 }
 
 function startChaosMode() {
+  const config = getLevelConfig();
   document.body.classList.add("chaos-mode");
+  document.body.classList.toggle("doom-mode", config.chaosTier >= 2);
+  if (state.accessibility || config.chaosTier < 2) return;
   state.chaosThemeTimer = setInterval(() => {
     const nextTheme = THEMES[Math.floor(Math.random() * THEMES.length)];
     paintTheme(nextTheme);
@@ -223,5 +299,6 @@ function stopChaosMode() {
     state.chaosThemeTimer = null;
   }
   document.body.classList.remove("chaos-mode");
+  document.body.classList.remove("doom-mode");
   applyTheme(state.theme);
 }

@@ -12,8 +12,14 @@
   .stats-dock {
     left: 10px;
     bottom: 10px;
-    width: 154px;
+    width: 160px;
     gap: 6px 10px;
+  }
+
+  .pause-btn {
+    right: 10px;
+    bottom: 58px;
+    min-width: 154px;
   }
 
   .emergency-stop {
@@ -33,6 +39,10 @@
   .level-choices {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .breakdown-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 520px) {
@@ -41,6 +51,7 @@
   }
 
   .stats-dock,
+  .pause-btn,
   .emergency-stop {
     width: 142px;
     min-width: 142px;

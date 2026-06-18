@@ -7,7 +7,7 @@
   grid-template-columns: repeat(2, minmax(64px, 1fr));
   gap: 8px 12px;
   width: 178px;
-  padding: 10px 12px;
+  padding: 9px 11px;
   border: 1px solid var(--border);
   border-radius: 14px;
   background: var(--panel-alpha);
@@ -36,6 +36,14 @@
   font-size: 19px;
   font-weight: 700;
   line-height: 1.05;
+}
+
+.status-value {
+  max-width: 72px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
 }
 
 .game-controls {
@@ -77,6 +85,23 @@
 
 .shake:focus {
   box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.4);
+}
+
+.pause-btn {
+  position: absolute;
+  right: 14px;
+  bottom: 64px;
+  z-index: 3;
+  min-width: 178px;
+  background: linear-gradient(135deg, #334155, #0f172a);
+  color: white;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.26);
+}
+
+.pause-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
 }
 
 .emergency-stop {
